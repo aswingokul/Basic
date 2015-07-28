@@ -104,6 +104,8 @@ public class BinaryTree {
 //		System.out.println("tree has path sum of 12: "+ btree.hasPathSum(root, 12));
 		System.out.println("min depth: "+btree.minDepthIter(root));
 		System.out.println("max Depth: "+btree.maxDepth(root));
+		btree.createLevelLinkedListIter(root);
+		System.out.println("Max Dist between Leaves: "+ btree.leafMaxDist(root));
 	}
 	
 	/*=================================
@@ -298,6 +300,7 @@ public class BinaryTree {
 	/*========================================================================
 	 * Returns true if the abs difference of depth between left sub-tree 
 	 * and right sub-tree is not more than 1
+	 * Time Complexity: O(N^2)
 	 *========================================================================
 	 */
 	public boolean isBalanced(TreeNode node){
@@ -311,6 +314,36 @@ public class BinaryTree {
 			return true;
 		
 		return false;
+	}
+	/*=======================================================
+	 * Checks the height a node's left and right subtrees
+	 * Returns -1 if the tree is not balanced or returns the 
+	 * tree's original height
+	 * Time Complexity: O(N)
+	 * Space Complexity: O(H) - H - Height of the tree
+	 * ======================================================
+	 */
+	public int checkHeight(TreeNode root){
+		if(root == null)
+			return 0;
+		
+		int leftHeight = checkHeight(root.leftChild);
+		if(leftHeight == -1)
+			return -1;
+		int rightHeight = checkHeight(root.rightChild);
+		if(rightHeight == -1)
+			return -1;
+		if(Math.abs(leftHeight-rightHeight)>1)
+			return -1;
+		else
+			return Math.max(leftHeight, rightHeight)+1;
+	}
+	
+	public boolean isBalanced2(TreeNode root){
+		if(checkHeight(root) == -1)
+			return false;
+		else
+			return true;
 	}
 	
 	/*========================================================================
@@ -872,6 +905,10 @@ public class BinaryTree {
 		return 0;		
 	}
 	
+	/*======================================
+	 * Returns the max depth of Binary Tree
+	 *======================================
+	 */
 	public int maxDepth(TreeNode root){
 		if(root == null)
 			return 0;
@@ -879,4 +916,181 @@ public class BinaryTree {
 			return Math.max(maxDepth(root.leftChild)+1, maxDepth(root.rightChild)+1);
 	}
 	
+	/*=========================================================
+	 * Creates a LinkedList of nodes at each level - Wrapper
+	 * =========================================================
+	 */
+	void createLevelLinkedList(TreeNode root){
+		ArrayList<LinkedList<TreeNode>> lists = new ArrayList<LinkedList<TreeNode>>();
+		createLevelLinkedList(root,lists,0);
+		for(LinkedList<TreeNode> list : lists){
+			for(TreeNode n : list){
+				System.out.print(n.data+" ");
+			}
+			System.out.println();
+		}
+	}
+	
+	/*=========================================================
+	 * Creates a LinkedList of nodes at each level recursively
+	 * =========================================================
+	 */
+	void createLevelLinkedList(TreeNode root, ArrayList<LinkedList<TreeNode>> lists, int level){
+		if(root == null)
+			return;
+		LinkedList<TreeNode> list = null;
+		int sz = lists.size();
+		if(sz == level){
+			list = new LinkedList<TreeNode>();
+			lists.add(list);
+		}else
+			list = lists.get(level);
+		list.add(root);
+		createLevelLinkedList(root.leftChild,lists,level+1);
+		createLevelLinkedList(root.rightChild,lists,level+1);
+	}
+	
+	/*===============================================================
+	 * Creates a LinkedList of nodes at each level Iteratively - BFS
+	 * ==============================================================
+	 */
+	void createLevelLinkedListIter(TreeNode root){
+		ArrayList<LinkedList<TreeNode>> result = new ArrayList<LinkedList<TreeNode>>();
+		LinkedList<TreeNode> curr = new LinkedList<TreeNode>();
+		if(root!=null) curr.add(root);
+		while(curr.size() >0){
+			result.add(curr);
+			LinkedList<TreeNode> parents = curr;
+			curr = new LinkedList<TreeNode>();
+			for(TreeNode parent : parents){
+				if(parent.leftChild != null)
+					curr.add(parent.leftChild);
+				if(parent.rightChild != null)
+					curr.add(parent.rightChild);
+			}
+		}
+		
+		for(LinkedList<TreeNode> list : result){
+			for(TreeNode n : list){
+				System.out.print(n.data+" ");
+			}
+			System.out.println();
+		}
+	}
+	
+	/*==================================================================
+	 * Returns the common ancestor of 2 nodes p and q for a binary tree
+	 * Wrapper class
+	 * =================================================================
+	 */
+	TreeNode commonAncestor(TreeNode root, TreeNode p, TreeNode q){
+		if(!covers(root,p) || !covers(root,q))
+			return null;
+		return commonAncestorHelper(root,p,q);
+	}
+	/*=================================
+	 * Returns true if the node p is 
+	 * present in the tree else false
+	 * ================================
+	 */
+	boolean covers(TreeNode root, TreeNode p){
+		if(root == null)
+			return false;
+		if(root == p)
+			return true;
+		return covers(root.leftChild,p)||covers(root.rightChild,p);
+	}
+	
+	/*========================================================
+	 * Checks whether the nodes p and q are in the same side 
+	 * of the tree. If it is not in the same side, return the 
+	 * root else recur based on the side in which both the trees
+	 * are present
+	 * Time Complexity: O(N)
+	 * ========================================================
+	 */
+	TreeNode commonAncestorHelper(TreeNode root,TreeNode p, TreeNode q){
+		if(root == null)
+			return null;
+		
+		if(root == p || root == q)
+			return root;
+		
+		if(p == null || q == null)
+			return root;
+		
+		boolean is_p_on_left = covers(root.leftChild,p);
+		boolean is_q_on_left = covers(root.leftChild,q);
+		
+		if(is_p_on_left != is_q_on_left)
+			return root;
+		if(is_p_on_left)
+			return commonAncestorHelper(root.leftChild,p,q);
+		else
+			return commonAncestorHelper(root.rightChild,p,q);
+	}
+	
+	/*==================================================================================
+	 * Class to return the node itself and boolean whether that is an ancestor or not
+	 *==================================================================================
+	 */
+	class Result{
+		TreeNode node;
+		boolean isAncestor;
+		
+		Result(TreeNode n, boolean isAnc){
+			node = n;
+			isAncestor = isAnc;
+		}
+	}
+	/*==================================================================
+	 * Optimized helper class to find Common Ancestor in a binary tree
+	 *==================================================================
+	 */
+	Result commonAncOptHelper(TreeNode root, TreeNode p, TreeNode q){
+		if(root == null)
+			return new Result(null,false);
+		if(root == p && root == q)
+			return new Result(root,true);
+		
+		Result rLeft = commonAncOptHelper(root.leftChild,p,q);
+		if(rLeft.isAncestor)	//Found Common Ancestor
+			return rLeft;
+		
+		Result rRight =  commonAncOptHelper(root.rightChild,p,q);
+		if(rRight.isAncestor)	//Found Common Ancestor
+			return rRight;
+		if(rLeft.node != null && rRight.node != null)
+			return new Result(root,true);	//This node is the common ancestor
+		else if(root == p || root == q){
+			/*If we are currently at p or q, we also found one of those nodes 
+			 * in a subtree, then this is truly an ancestor and flag should be true 
+			 */
+			boolean isAnc = rLeft.node!=null || rRight.node!=null ? true : false;
+			return new Result(root,isAnc);
+		}else
+			return new Result(rLeft.node !=null? rLeft.node : rRight.node,false);		
+	}
+	
+	
+	TreeNode commonAncOpt(TreeNode root, TreeNode p, TreeNode q){
+		Result r = commonAncOptHelper(root,p,q);
+		if(r.isAncestor)
+			return r.node;
+		else
+			return null;
+	}
+	
+	/*===============================================================
+	 * Returns the max distance between the leaves in a binary tree
+	 *===============================================================
+	 */
+	int leafMaxDist(TreeNode root){
+		if(root == null)
+			return 0;
+		int lDepth = depth(root.leftChild);
+		int rDepth = depth(root.rightChild);
+		
+		return lDepth+rDepth+1;
+	}
 }

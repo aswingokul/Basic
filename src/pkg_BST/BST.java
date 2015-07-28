@@ -17,9 +17,9 @@ public class BST {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		BST bst = new BST();
-//		BST bst2 = new BST();
+		BST bst2 = new BST();
 		int preOrderArr[] = {30,20,10,25,40,35,50};
-//		int sorted[] = {10,20,30,40,50,60};
+		int sorted[] = {10,20,30,30,40,50,60};
 //		System.out.println("Constructing the BST from the given PreOrder array");
 		TreeNode root = bst.constructBST(preOrderArr);
 		System.out.print("Pre Order Traversal: ");
@@ -35,7 +35,7 @@ public class BST {
 //		System.out.print("Search result for key 40: "+ bst.searchBST(root, 4));
 //		bst2.buildBSTSorted(sorted);
 		
-//		TreeNode root = bst2.buildBSTSorted(sorted);
+		TreeNode root2 = bst2.buildBSTSorted(sorted);
 		
 //		System.out.print("\nIn Order Traversal: ");
 //		bst2.inOrder(root);
@@ -45,19 +45,20 @@ public class BST {
 //		
 //		System.out.print("\nPre Order Traversal: ");
 //		bst.preOrder(root);
-		System.out.println("\nMinimum Element: "+bst.getMinNode(root));
+//		System.out.println("\nMinimum Element: "+bst.getMinNode(root));
 		
-		System.out.println("Is this a BST ? "+ bst.checkBST(root));
-		System.out.println("LCA of node 34 and 50: "+bst.lowestCommonAncestor(root,34,50).data);
+		System.out.println("\nIs this a BST ? "+ bst2.checkBST(root2));
 		
-		System.out.println("Depth of left subtree:"+ bst.depth(root.left));
-		System.out.print("2nd smallest Element: "); 
-		bst.kthSmallest(root, 5);
-		
+//		System.out.println("LCA of node 34 and 50: "+bst.lowestCommonAncestor(root,34,50).data);
+//		
+//		System.out.println("Depth of left subtree:"+ bst.depth(root.left));
+//		System.out.print("2nd smallest Element: "); 
+//		bst.kthSmallest(root, 5);
+//		
 //		System.out.print("5 th smallest Element: "+ bst.kthSmallest2(root, 5).data);
 		
-		System.out.print("Nodes between 20 and 40 are: ");
-		bst.printRange(root, 10, 15);
+//		System.out.print("Nodes between 20 and 40 are: ");
+//		bst.printRange(root, 10, 15);
 		
 	}
 	

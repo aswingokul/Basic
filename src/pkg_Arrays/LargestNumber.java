@@ -28,13 +28,7 @@ public class LargestNumber {
 			strs[i] = String.valueOf(nums[i]);
 		}
 		
-		Arrays.sort(strs,new Comparator<String>(){
-            public int compare(String s1, String s2){
-                String lr = s1 + s2;
-                String rl = s2 + s1;
-                return -lr.compareTo(rl);
-            }
-        });
+		Arrays.sort(strs);
 		StringBuilder sb = new StringBuilder();
 		for(String s:strs)
 			sb.append(s);
