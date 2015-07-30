@@ -96,4 +96,6 @@ public class GenerateParenthesis {
 		String right = s.substring(leftInd+1);
 		return left+"()"+right;
 	}
+	
+	
 }

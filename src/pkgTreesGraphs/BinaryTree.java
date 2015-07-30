@@ -1093,4 +1093,24 @@ public class BinaryTree {
 		
 		return lDepth+rDepth+1;
 	}
+	
+	/*=========================================
+	 * Flattens a binary tree to a linked list
+	 *=========================================
+	 */
+	void flattenBTree(TreeNode root) {
+		Stack<TreeNode> stack = new Stack<TreeNode>();
+		TreeNode p = root;
+		while(p != null || !stack.isEmpty()) {
+			if(p.rightChild != null)
+				stack.push(p.rightChild);
+			if(p.leftChild != null) {
+				p.rightChild = p.leftChild;
+				p.leftChild = null;
+			}else {
+				p.rightChild = stack.pop();
+			}
+			p = p.rightChild;					
+		}
+	}
 }
