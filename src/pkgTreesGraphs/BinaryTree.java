@@ -254,8 +254,26 @@ public class BinaryTree {
 		return 0;	
 	}
 	
-	/*
+	/*==============================================
+	 * Returns true if both are identical trees
+	 *==============================================
+	 */
+    public boolean isSameTree(TreeNode p, TreeNode q) {
+        if(p == null && q == null)
+            return true;
+        
+        if(p == null || q == null)
+            return false;
+        if(p.data != q.data)
+            return false;
+        
+        return isSameTree(p.leftChild,q.leftChild) && isSameTree(p.rightChild,q.rightChild);
+    }
+
+	
+	/*=======================================
 	 * Returns the height/depth of the tree
+	 *=======================================
 	 */
 	public int depth(TreeNode node){
 		if(node == null)
