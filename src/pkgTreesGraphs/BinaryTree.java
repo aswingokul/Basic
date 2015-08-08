@@ -1131,4 +1131,72 @@ public class BinaryTree {
 			p = p.rightChild;					
 		}
 	}
+	
+	/*===============================================================================
+	 * Constructs a Binary Tree from the given PreOrder and InOrder arrays - Wrapper
+	 *=============================================================================== 
+	 */
+	public TreeNode buildTree(int[] preorder, int[] inorder) {
+        return buildTree(preorder,0,preorder.length-1,inorder,0,inorder.length-1);
+    }
+    
+	/*=================================================================================
+	 * Constructs a Binary Tree from the given PreOrder and InOrder arrays - Recursive
+	 *================================================================================= 
+	 */
+    TreeNode buildTree(int[]preorder, int preStart, int preEnd, int[] inorder, int inStart, int inEnd){
+        if(inStart > inEnd || preStart > preEnd)
+            return null;
+            
+        TreeNode root = new TreeNode(preorder[preStart]);
+        
+        int k=0;
+        for(int i=0; i<=inEnd; i++){
+            if(inorder[i] == root.data){
+                k=i;
+                break;
+            }
+        }
+        
+        root.leftChild = buildTree(preorder,preStart+1,preStart+(k-inStart),inorder,inStart,k-1);
+        root.rightChild = buildTree(preorder,preStart+(k-inStart)+1,preEnd, inorder, k+1, inEnd);
+        
+        return root;
+    }
+    
+    /*===============================================================================
+	 * Constructs a Binary Tree from the given PreOrder and InOrder arrays - Wrapper
+	 *=============================================================================== 
+	 */
+    public TreeNode buildTreePost(int[] inorder, int[] postorder) {
+        int inStart = 0;
+        int inEnd = inorder.length-1;
+        int postStart = 0;
+        int postEnd = postorder.length-1;
+        
+        return buildTree(inorder,inStart,inEnd,postorder,postStart, postEnd);
+    }
+    
+    /*=================================================================================
+	 * Constructs a Binary Tree from the given PreOrder and InOrder arrays - Recursive
+	 *================================================================================= 
+	 */
+    TreeNode buildTreePost(int[] inorder, int inStart, int inEnd, int[] postorder, int postStart, int postEnd ){
+        if(inStart > inEnd || postStart > postEnd)
+            return null;
+        
+        TreeNode root = new TreeNode(postorder[postEnd]);
+        int k=0;
+        for(int i=0; i<=inEnd; i++){
+            if(inorder[i] == root.data){
+                k=i;
+            }
+        }
+        
+        root.leftChild = buildTree(inorder,inStart, k-1,postorder,postStart,postStart+k-(inStart+1));
+        root.rightChild = buildTree(inorder,k+1,inEnd, postorder, postStart+k-inStart, postEnd-1);
+        
+        return root;
+        
+    }
 }
