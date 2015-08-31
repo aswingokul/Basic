@@ -35,7 +35,7 @@ public class MinOfRotatedSortedArray {
 			}
 		}
 		min = Math.min(min, Math.min(nums[left], nums[right]));
-		System.out.println(min);
+		System.out.println(min);		
 	}
 
 }
