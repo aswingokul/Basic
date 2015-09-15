@@ -3,6 +3,8 @@
  */
 package pkg_BST;
 
+import java.util.HashMap;
+
 /**
  * @author Aswin
  *
@@ -60,6 +62,8 @@ public class BST {
 //		System.out.print("Nodes between 20 and 40 are: ");
 //		bst.printRange(root, 10, 15);
 		
+		System.out.print("Pair with sum 45 present: ");
+		System.out.println(bst.isPairPresent(root, 100));
 	}
 	
 	/*==========================================================
@@ -371,5 +375,25 @@ public class BST {
 			if(root.data < hi)
 				printRange(root.right,lo,hi);
 		}
+	}
+	
+	boolean isPairPresent(TreeNode root, int target){
+		HashMap<Integer,TreeNode> map = new HashMap<Integer,TreeNode>();
+		return isPairPresent(root, target, map);
+	}
+	
+	boolean isPairPresent(TreeNode root, int target, HashMap<Integer,TreeNode> map){
+		if(root == null)
+			return false;
+		int diff = target - root.data;
+		System.out.println("Checking in map for " + diff );
+		if(!map.containsKey(diff)){
+			System.out.println("Key: " + root.data +", Val: " + root);
+			map.put(root.data, root);
+		}else if(map.containsKey(diff)){
+			return true;
+		}
+		
+		return (isPairPresent(root.left, target, map) || isPairPresent(root.right, target, map));		
 	}
 }
