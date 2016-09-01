@@ -36,6 +36,7 @@ public class RainTrap {
 		}
 		return sum;
 	}
+<<<<<<< HEAD
 	
 	public int TrappingRain(int[] bin){
 		int left = 0, right = bin.length-1, maxLeftHeight = bin[left], maxRightHeight = bin[right];
@@ -58,5 +59,7 @@ public class RainTrap {
 		return sum;
 		
 	}
+=======
+>>>>>>> e1183d48c51150798e555e5c155c1abae0f1ee10
 
 }
